@@ -35,7 +35,7 @@ module.exports.get = function (callback) {
                     oids.find((item) => { return item.oid === varbinds[i].oid; }).value =
                         varbinds[i].oid === "1.3.6.1.4.1.935.10.1.1.6.1.1.0" ? varbinds[i].value / 10 : varbinds[i].value;
                 }
-            callback(oids);
+            callback(oids.map((item) => { return { name: item.name, value: item.value } }));
         }
     });
 }
