@@ -89,11 +89,13 @@ function onListening() {
   debug('Listening on ' + bind);
 }
 
+
 var CronJob = require('cron').CronJob;
 var job = new CronJob({
-  cronTime: '* * * * * *',
+  cronTime: '00 * * * * *',
   onTick: function () {    
     require('../upsinfo').get(function (oids) {
+      console.log(oids);
       require('../db/db').insert(oids);
     })
   },
