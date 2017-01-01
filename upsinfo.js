@@ -23,6 +23,10 @@ var oids = [
 ];
 
 module.exports.get = function (callback) {
+
+callback({name: 'qweqweqwe'});
+return;
+
     session.get(oids.map(function (item) { return item.oid; }), function (error, varbinds) {
         if (error) {
             console.error(error);

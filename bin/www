@@ -88,3 +88,16 @@ function onListening() {
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
+
+var CronJob = require('cron').CronJob;
+var job = new CronJob({
+  cronTime: '* * * * * *',
+  onTick: function () {    
+    require('../upsinfo').get(function (oids) {
+      require('../db/db').insert(oids);
+    })
+  },
+  start: true,
+  timeZone: 'Europe/Samara'
+});
+job.start();

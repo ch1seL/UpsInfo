@@ -3,10 +3,11 @@ var express = require('express');
 var router = express.Router();
 
 
-/* GET upsinfo. */
+/* GET gethistory. */
 router.get('/', function (req, res, next) {
-  require('../upsinfo').get(function (oids) {
-    res.json(oids);
+  require('../db/db').getlast(5).exec(function (err, docs) {
+    console.log(docs);
+    res.json(docs);
   });
 });
 
