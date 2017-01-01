@@ -6,6 +6,6 @@ module.exports.insert = function (doc) {
 }
 
 module.exports.getlast = function (limit) {
-    // $where: function () { return new Date(this.date).getMinutes().toString()[1]=="0"}; 
-    return db.find({} ).sort({ date: -1 }).limit(limit);
+    
+    return db.find({ $where: function () { return new Date(this.date).getMinutes() % 5 == 0 } }).sort({ date: -1 }).limit(limit);
 }
