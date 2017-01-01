@@ -1,4 +1,4 @@
-var Datastore = require('nedb'), db = new Datastore({ filename: 'db/upshistory', autoload: true });
+var Datastore = require('nedb'), db = new Datastore({ filename: 'db/upshistory.db', autoload: true });
 
 module.exports.insert = function (doc) {
     doc.date = Date();
