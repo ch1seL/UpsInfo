@@ -4,7 +4,7 @@ var db=require('../db/db');
 
 /* GET gethistory. */
 router.get('/', function (req, res, next) {
-  db.getlast(1440).exec(function (err, docs) {    
+  db.getlast(10).exec(function (err, docs) {    
     res.json(docs);
   });
 });
