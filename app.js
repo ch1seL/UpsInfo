@@ -4,6 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var settings = require('./settings.json');
 
 var index = require('./routes/index');
 var upsinfo = require('./routes/upsinfo');
@@ -45,6 +46,6 @@ app.use(function (err, req, res, next) {
   res.render('error');
 });
 
-app.listen(3001);
+app.listen(settings["httpPort"] || 3001);
 
 module.exports = app;

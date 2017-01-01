@@ -1,4 +1,8 @@
 var snmp = require("net-snmp");
+var settings = require('./settings.json')
+var upsIP = settings["upsIP"] || "10.118.134.46";
+
+
 
 var options = {
     port: 161,
@@ -9,7 +13,7 @@ var options = {
     version: snmp.Version2c
 };
 
-var session = snmp.createSession("10.118.134.46", "public", options);
+var session = snmp.createSession(upsIP, "public", options);
 
 var oids = [
     {

@@ -7,7 +7,6 @@
 var app = require('../app');
 var debug = require('debug')('foo:server');
 var http = require('http');
-
 /**
  * Get port from environment and store in Express.
  */
@@ -89,17 +88,5 @@ function onListening() {
   debug('Listening on ' + bind);
 }
 
-
-var CronJob = require('cron').CronJob;
-var job = new CronJob({
-  cronTime: '00 * * * * *',
-  onTick: function () {    
-    require('../upsinfo').get(function (oids) {
-      console.log(oids);
-      require('../db/db').insert(oids);
-    })
-  },
-  start: true,
-  timeZone: 'Europe/Samara'
-});
+var job = require('../job').Job;
 job.start();
