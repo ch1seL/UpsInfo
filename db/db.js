@@ -6,5 +6,7 @@ module.exports.insert = function (doc) {
 }
 
 module.exports.getlast = function (limit) {
+console.log(db.find({}));
+
     return db.find({}).sort({ date: -1 }).limit(limit);
 }

@@ -22,10 +22,16 @@ function drawChart() {
 
     getHistory(function (res) {
 
+        arr = [['Дата', 'Температура', 'Влажность']].
+            concat(res.map((item) => [new Date(item.date).toLocaleTimeString(), item.epm_temperature, item.epm_humidity]));
+
+        console.log(arr);
+
         var data = google.visualization.arrayToDataTable(
-            [['Дата', 'Температура', 'Влажность']].
-                concat(res.map((item) => [item.date, item.epm_temperature, item.epm_humidity]))
+            arr
         );
+
+
 
         var options = {
             title: 'Микроклимат в серверной',
