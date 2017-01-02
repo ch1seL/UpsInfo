@@ -40,7 +40,7 @@ module.exports.get = function (callback) {
                         varbinds[i].oid === "1.3.6.1.4.1.935.10.1.1.6.1.1.0" ? varbinds[i].value / 10 : varbinds[i].value;
                 }
 
-            res = { date: Date() };
+            res = { date: new Date().getTime() };
 
             oids.forEach((oid) => { res[oid.name] = oid.value })
 

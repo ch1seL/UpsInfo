@@ -9,13 +9,10 @@ function getHistory(callback) {
             if (this.status == 200) {
                 var response = JSON.parse(this.responseText);
                 res = response.
-                    map((item) => [item.date, item.epm_temperature, item.epm_humidity]).sort((a, b) => {
-                        a = new Date(a[0]).getTime();
-                        b = new Date(b[0]).getTime();
-                        return (a - b < 0 ? -1 : a - b > 0 ? 1 : 0);
-                    }).
+                    map((item) => [item.date, item.epm_temperature, item.epm_humidity]).sort(1 -1).
                     map((item) => {
-                        date = new Date(item[0]);
+                        date = new Date()
+                        date.setTime(item[0]);
                         return [date.toLocaleTimeString(), item[1], item[2]];
                     });
 
