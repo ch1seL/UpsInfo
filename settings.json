@@ -7,5 +7,6 @@
     "mailTo": "mail2sms@mcommunicator.ru;ch1seL@ya.ru;salamatovae@kombi-korm.ru",
     "mailSubject": "Рассылка",
     "mailText": "#repl Температура в серверной: ",
-    "upsIP": "10.118.134.46"
+    "upsIP": "10.118.134.46",
+    "historyHours": 48
 }

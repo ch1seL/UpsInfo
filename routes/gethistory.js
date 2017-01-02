@@ -1,15 +1,17 @@
 var express = require('express');
 var router = express.Router();
 var db = require('../db/db');
+var settings = require('../settings.json')
 
-var hours = 30;
+var hours = settings["historyHours"] || 24;
+var ch = hours * 60 * 60 * 50;
 
 /* GET gethistory. */
 router.get('/', function (req, res, next) {
   db.getlast(hours).exec(function (err, docs) {
 
     //console.log(docs);
-    ch = hours * 60 * 60 * 100;
+    
     var result = docs
       .map((item) => {
         //console.log(Math.round(item.date / ch) * ch);
