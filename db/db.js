@@ -5,16 +5,16 @@ module.exports.insert = function (doc) {
     db.insert(doc);
 }
 
-module.exports.getlast = function (limit) {
+module.exports.getlast = function (hours) {
+
+    //миллисекунд в часах
+    ch = hours * 60 * 60 * 1000;
+    dateStart = new Date();
+    dateStart = dateStart.getTime() - ch;
     return db.find({
-        $where: function () {
-            var date = new Date()
-            date.setTime(this.date);
-            return date.getMinutes() % 5 == 0
-        }
+        date: { $gte: dateStart }
     })
         .sort({ date: -1 })
-        .limit(limit);
 }
 
 module.exports.lastMailSend = function () {
