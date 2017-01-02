@@ -9,7 +9,7 @@ function getHistory(callback) {
             if (this.status == 200) {
                 var response = JSON.parse(this.responseText);
                 res = response.
-                    map((item) => [item.date, item.epm_temperature, item.epm_humidity]).sort(1 -1).
+                    map((item) => [item.date, item.epm_temperature, item.epm_humidity]).sort(1 - 1).
                     map((item) => {
                         date = new Date()
                         date.setTime(item[0]);
@@ -39,32 +39,6 @@ function drawChart() {
             arr
         );
 
-        var materialOptions = {
-            chart: {
-                title: 'Микроклимат в серверной',
-                curveType: 'function'
-            },
-
-            width: 900,
-            height: 500,
-            series: {
-                // Gives each series an axis name that matches the Y-axis below.                
-                0: { lineWidth: 100, axis: 'Температура' },
-                1: { axis: 'Влажность' }
-            },
-            axes: {
-                // Adds labels to each axis; they don't have to match the axis names.
-                y: {
-
-                    Temps: { label: 'Temps (Celsius)' },
-                    Daylight: { label: 'Daylight' }
-                }
-            },
-            vAxis: { minValue: 0 }
-
-        };
-
-
         var classicOptions = {
             title: 'Микроклимат в серверной',
             curveType: 'function',
@@ -77,32 +51,10 @@ function drawChart() {
             },
             vAxes: {
                 // Adds titles to each axis.
-                0: { title: 'Температура', viewWindow: { min: 16 } },
-                1: { title: 'Влажность' , viewWindow: { min: 20 } }
+                0: { title: 'Температура', viewWindow: { min:20 , max: 22 } },
+                1: { title: 'Влажность', viewWindow: {  } }
             }
         }
-        /*
-        var classicOptions = {
-            title: 'Микроклимат в серверной',
-            curveType: 'function',
-            width: 1200,
-            height: 500,
-            // Gives each series an axis that matches the vAxes number below.
-            series: {
-                0: { targetAxisIndex: 0 },
-                1: { targetAxisIndex: 1 }
-            },
-            vAxes: {
-                // Adds titles to each axis.
-                0: { title: 'Температура2' },
-                1: { title: 'Влажность' }
-            },
-            vAxis: {
-                viewWindow: {
-                    max: 20
-                }
-            }
-        };*/
 
         chart.draw(data, classicOptions);
     });
