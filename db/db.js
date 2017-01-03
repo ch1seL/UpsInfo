@@ -9,8 +9,7 @@ module.exports.getlast = function (hours) {
 
     //миллисекунд в часах
     ch = hours * 60 * 60 * 1000;
-    dateStart = new Date();
-    dateStart = dateStart.getTime() - ch;
+    dateStart = Date.now() - ch;
     return db.find({
         date: { $gte: dateStart }
     })

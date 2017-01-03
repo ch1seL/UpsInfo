@@ -7,25 +7,22 @@ var settings = require('../settings.json')
 
 
 /* GET gethistory. */
-
-
 router.get('/', function (req, res, next) {
 
   //console.log(req.params);
   var hours = req.params.hours || settings["historyHours"] || 24;
-  var ch = hours * 60 * 60 * 50;
+  var ch = hours * 60 * 60 ;
 
   db.getlast(hours).exec(function (err, docs) {
-
-    startIndex = -1;
     var result = docs
       .map((item) => {
         return { date: Math.floor(item.date / ch) * ch, epm_temperature: item.epm_temperature, epm_humidity: item.epm_humidity }
-      })
+      });
 
     upsinfo.get((upsinfo) => {
       result.push(upsinfo);
 
+      startIndex = -1;
       result = result.reduce(function (acc, cur, index) {
         altIndex = acc.length - 1;
         if ((acc[altIndex] || { date: 0 }).date == cur.date) {
@@ -44,9 +41,8 @@ router.get('/', function (req, res, next) {
 
         return acc;
       }, []);
-
-      //console.log(result);
       res.json(result);
+
     });
   });
 });
