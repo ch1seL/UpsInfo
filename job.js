@@ -14,7 +14,7 @@ var OnTick = function OnTick() {
                 if (err != null) console.log('Ошибка получения последней даты ' + err);
                 else {
                     //Рассылка СМС не чаще раза в minSmsIntervalMinutes                    
-                    oids.mailsend = ((docs[0] == undefined) || (docs[0].date == undefined) || (Math.round((new Date().getTime() - docs[0].date) / 60000) >= minSmsIntervalMinutes)) ? true : false;
+                    oids.mailsend = ((docs[0] == undefined) || (docs[0].date == undefined) || (Math.round((Date.now - docs[0].date) / 60000) >= minSmsIntervalMinutes)) ? true : false;
 
                     if (oids.mailsend) Mail.send(oids.epm_temperature);
                     db.insert(oids);

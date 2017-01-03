@@ -14,7 +14,7 @@ module.exports.getlast = function (hours) {
     return db.find({
         date: { $gte: dateStart }
     })
-        .sort({ date: -1 })
+        .sort({ date: 1 })
 }
 
 module.exports.lastMailSend = function () {

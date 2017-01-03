@@ -1,6 +1,13 @@
 google.charts.load('current', { 'packages': ['line', 'corechart'] });
 google.charts.setOnLoadCallback(drawChart);
 
+var dateFormatOptions = {
+    month: 'numeric',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric'
+};
+
 function getHistory(callback) {
     var request = new XMLHttpRequest();
     request.open('GET', '/gethistory');
@@ -9,11 +16,9 @@ function getHistory(callback) {
             if (this.status == 200) {
                 var response = JSON.parse(this.responseText);
                 res = response.
-                    map((item) => [item.date, item.epm_temperature, item.epm_humidity]).sort(1 - 1).
                     map((item) => {
-                        date = new Date()
-                        date.setTime(item[0]);
-                        return [date.toLocaleTimeString(), item[1], item[2]];
+                        date = new Date(item.date)
+                        return [date.toLocaleString("ru", dateFormatOptions), item.epm_temperature, item.epm_humidity];
                     });
 
                 callback(res);
@@ -28,11 +33,13 @@ function getHistory(callback) {
 
 function drawChart() {
     getHistory(function (res) {
+
+        lastRes = res[res.length - 1];
         chartDivTemp = document.getElementById('chart_div_temp');
         chartTemp = new google.visualization.LineChart(chartDivTemp);
         dataTemp = google.visualization.arrayToDataTable([['Дата', 'Температура']].concat(res.map((item) => [item[0], item[1]])));
         classicOptionsTemp = {
-            title: 'Температура в серверной',
+            title: 'Температура в серверной ' + lastRes[1] || "",
             curveType: 'function',
             width: 1000,
             height: 400,
@@ -51,7 +58,7 @@ function drawChart() {
         chartHum = new google.visualization.LineChart(chartDivHum);
         dataHum = google.visualization.arrayToDataTable([['Дата', 'Влажность']].concat(res.map((item) => [item[0], item[2]])));
         classicOptionsHum = {
-            title: 'Влажность в серверной',
+            title: 'Влажность в серверной ' + lastRes[2] || "",
             curveType: 'function',
             width: 1000,
             height: 400,

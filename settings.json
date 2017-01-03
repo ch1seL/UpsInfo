@@ -8,5 +8,5 @@
     "mailSubject": "Рассылка",
     "mailText": "#repl Температура в серверной: ",
     "upsIP": "10.118.134.46",
-    "historyHours": 48
+    "historyHours": 24
 }
