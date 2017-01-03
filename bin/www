@@ -89,4 +89,4 @@ function onListening() {
 }
 
 var job = require('../job').Job;
-job.start();
+//job.start();
