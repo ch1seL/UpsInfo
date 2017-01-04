@@ -46,11 +46,12 @@ function getRes(reqParam, res) {
     var start = parseInt(reqParam.start || (Date.now() - ((reqParam.hours == "" ? 24 : reqParam.hours) * 60 * 60 * 1000)));
     var end = parseInt(reqParam.end || Date.now());
 
-    var ch = (end - start) / 200;
+
 
     db.getlast(start, end).exec(function(err, docs) {
         var result = docs
             .map((item) => {
+                var ch = (docs[docs.length - 1].date - docs[0].date) / 200;
                 return { date: Math.floor(item.date / ch) * ch, epm_temperature: item.epm_temperature, epm_humidity: item.epm_humidity }
             });
         if (now)
