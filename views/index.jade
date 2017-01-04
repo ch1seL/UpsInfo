@@ -20,11 +20,11 @@ rrr
 
     div(class="wrapper")
       div(class="left_block")
-        p Период
-        input(id="dateStart",name="dateStart",type="datetime-local",onchange="dateChanged(this,value)",value="#{startDate}")        
+        p История за период:
+        input(id="dateStart",name="dateStart",type="datetime-local",onchange="dateChanged(this,value)",value="#{startDate}")    
         input(id="dateEnd",name="dateEnd",type="datetime-local",onchange="dateChanged(this,value)",value="#{endDate}")
         p
-        a(id="dateForm" href="/#{start}-#{end}") Загрузить историю за период   
+        a(id="dateForm" href="/#{start}-#{end}") Загрузить  
       div(class="right_block")
             
         br
