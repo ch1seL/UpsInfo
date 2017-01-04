@@ -1,5 +1,50 @@
-extends layout
+doctype html
+html
+  head
+    title= title
+    link(href='/stylesheets/style.css', rel='stylesheet')
 
-block content
-  div(id="chart_div_temp")
-  div(id="chart_div_hum")
+    script(src='https://www.gstatic.com/charts/loader.js', type='text/javascript')
+    script(src='/javascripts/chart.js', type='text/javascript')    
+    script(src='/javascripts/script.js', type='text/javascript')
+  body
+    div(id="parameters" style="visibility:hidden" start="#{start}" end="#{end}")
+rrr
+    - startDate=new Date();
+    - startDate.setTime(start - startDate.getTimezoneOffset()*60*1000);
+    - startDate=startDate.toISOString().substring(0,16)
+
+    - endDate=new Date();
+    - endDate.setTime(end - endDate.getTimezoneOffset()*60*1000);
+    - endDate=endDate.toISOString().substring(0,16)
+
+    div(class="wrapper")
+      div(class="left_block")
+        p Период
+        input(id="dateStart",name="dateStart",type="datetime-local",onchange="dateChanged(this,value)",value="#{startDate}")        
+        input(id="dateEnd",name="dateEnd",type="datetime-local",onchange="dateChanged(this,value)",value="#{endDate}")
+        p
+        a(id="dateForm" href="/#{start}-#{end}") Загрузить историю за период   
+      div(class="right_block")
+            
+        br
+        a(href="/1") История за последний час 
+        br
+        br
+        a(href="/24") История за сутки 
+        br
+        br
+        a(href="/720") История за последний месяц
+        br
+        br
+        a(href="/8760") История за последний год 
+        
+        
+
+
+          
+
+    div(style="clear:both;")
+
+    div(id="chart_div_temp")
+    div(id="chart_div_hum")

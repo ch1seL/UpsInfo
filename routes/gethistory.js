@@ -4,47 +4,73 @@ var db = require('../db/db');
 var upsinfo = require('../upsinfo');
 var settings = require('../settings.json')
 
+function Reduce(result) {
+    count = 0;
+    result = result.reduce(function(acc, cur, index) {
 
-
-/* GET gethistory. */
-router.get('/', function (req, res, next) {
-
-  //console.log(req.params);
-  var hours = req.params.hours || settings["historyHours"] || 24;
-  var ch = hours * 60 * 60 ;
-
-  db.getlast(hours).exec(function (err, docs) {
-    var result = docs
-      .map((item) => {
-        return { date: Math.floor(item.date / ch) * ch, epm_temperature: item.epm_temperature, epm_humidity: item.epm_humidity }
-      });
-
-    upsinfo.get((upsinfo) => {
-      result.push(upsinfo);
-
-      startIndex = -1;
-      result = result.reduce(function (acc, cur, index) {
-        altIndex = acc.length - 1;
-        if ((acc[altIndex] || { date: 0 }).date == cur.date) {
-          acc[altIndex].epm_temperature += cur.epm_temperature;
-          acc[altIndex].epm_humidity += cur.epm_humidity;
+        if (acc.length == 0) {
+            acc.push({ date: cur.date, epm_temperature: cur.epm_temperature, epm_humidity: cur.epm_humidity });
+            count = 1;
+            return acc;
         }
-        else {
-          if (acc[altIndex] != undefined) {
-            count = index - startIndex;
-            acc[altIndex].epm_temperature /= count;
-            acc[altIndex].epm_humidity /= count;
-          }
-          startIndex = index;
-          acc.push({ date: cur.date, epm_temperature: cur.epm_temperature, epm_humidity: cur.epm_humidity });
+
+        accIndex = acc.length - 1;
+
+        if (index == result.length - 1) {
+            acc[accIndex].epm_temperature /= count;
+            acc[accIndex].epm_humidity /= count;
+            return acc;
+        }
+
+        if (acc[accIndex].date == cur.date) {
+            acc[accIndex].epm_temperature += cur.epm_temperature;
+            acc[accIndex].epm_humidity += cur.epm_humidity;
+            count++;
+        } else {
+            acc[accIndex].epm_temperature /= count;
+            acc[accIndex].epm_humidity /= count;
+
+            acc.push({ date: cur.date, epm_temperature: cur.epm_temperature, epm_humidity: cur.epm_humidity });
+            count = 1;
         }
 
         return acc;
-      }, []);
-      res.json(result);
+    }, []);
 
+    return result;
+}
+
+function getRes(reqParam, res) {
+    var now = end == undefined;
+
+    var start = parseInt(reqParam.start || (Date.now() - ((reqParam.hours == "" ? 24 : reqParam.hours) * 60 * 60 * 1000)));
+    var end = parseInt(reqParam.end || Date.now());
+
+    var ch = (end - start) / 200;
+
+    db.getlast(start, end).exec(function(err, docs) {
+        var result = docs
+            .map((item) => {
+                return { date: Math.floor(item.date / ch) * ch, epm_temperature: item.epm_temperature, epm_humidity: item.epm_humidity }
+            });
+        if (now)
+            upsinfo.get((upsinfo) => {
+                result.push(upsinfo);
+                res.json(Reduce(result));
+            });
+        else res.json(Reduce(result));
     });
-  });
+}
+
+/* GET gethistory. */
+router.get('/:hours(|[0-9]+)', function(req, res, next) {
+    getRes(req.params, res);
 });
+
+/* GET gethistory. */
+router.get('/:start([0-9]+)-:end([0-9]+)', function(req, res, next) {
+    getRes(req.params, res);
+});
+
 
 module.exports = router;

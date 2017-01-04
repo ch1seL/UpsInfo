@@ -5,13 +5,9 @@ module.exports.insert = function (doc) {
     db.insert(doc);
 }
 
-module.exports.getlast = function (hours) {
-
-    //миллисекунд в часах
-    ch = hours * 60 * 60 * 1000;
-    dateStart = Date.now() - ch;
+module.exports.getlast = function (dateStart, dateEnd) {
     return db.find({
-        date: { $gte: dateStart }
+        date: { $gte: dateStart, $lte: dateEnd }
     })
         .sort({ date: 1 })
 }

@@ -3,7 +3,6 @@ var settings = require('./settings.json')
 var upsIP = settings["upsIP"] || "10.118.134.46";
 
 
-
 var options = {
     port: 161,
     retries: 1,

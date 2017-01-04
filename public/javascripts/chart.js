@@ -1,3 +1,4 @@
+
 google.charts.load('current', { 'packages': ['line', 'corechart'] });
 google.charts.setOnLoadCallback(drawChart);
 
@@ -9,8 +10,18 @@ var dateFormatOptions = {
 };
 
 function getHistory(callback) {
+    var parameters = document.getElementById('parameters');
+
+    start = end = "undefined";
+    if (parameters != null) {
+        start = parameters.getAttribute("start");
+        end = parameters.getAttribute("end");
+    }
+
+    var urlParams = (start != "undefined" && end != "undefined") ? start + '-' + end : "";
+
     var request = new XMLHttpRequest();
-    request.open('GET', '/gethistory');
+    request.open('GET', '/gethistory/' + urlParams);
     request.onreadystatechange = function (e) {
         if (this.readyState == 4) {
             if (this.status == 200) {
@@ -24,7 +35,7 @@ function getHistory(callback) {
                 callback(res);
             }
             else {
-                // тут сообщаем о сетевой ошибке
+                console.log('Сетевая ошибка!');
             }
         }
     }
@@ -37,9 +48,9 @@ function drawChart() {
         lastRes = res[res.length - 1];
         chartDivTemp = document.getElementById('chart_div_temp');
         chartTemp = new google.visualization.LineChart(chartDivTemp);
-        dataTemp = google.visualization.arrayToDataTable([['Дата', 'Температура']].concat(res.map((item) => [item[0], item[1]])));
+        dataTemp = google.visualization.arrayToDataTable([['Дата', 'Температура']].concat(res.map((item) => [item[0], +item[1].toFixed(1)])));
         classicOptionsTemp = {
-            title: 'Температура в серверной ' + lastRes[1] || "",
+            title: 'Температура в серверной ' + lastRes[1].toFixed(1) || "",
             curveType: 'function',
             width: 1000,
             height: 400,
@@ -56,9 +67,9 @@ function drawChart() {
 
         chartDivHum = document.getElementById('chart_div_hum');
         chartHum = new google.visualization.LineChart(chartDivHum);
-        dataHum = google.visualization.arrayToDataTable([['Дата', 'Влажность']].concat(res.map((item) => [item[0], item[2]])));
+        dataHum = google.visualization.arrayToDataTable([['Дата', 'Влажность']].concat(res.map((item) => [item[0], +item[2].toFixed(0)])));
         classicOptionsHum = {
-            title: 'Влажность в серверной ' + lastRes[2] || "",
+            title: 'Влажность в серверной ' + lastRes[2].toFixed(0) || "",
             curveType: 'function',
             width: 1000,
             height: 400,
