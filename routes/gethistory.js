@@ -50,7 +50,6 @@ function getRes(reqParam, res) {
                 return { date: Math.floor(item.date / ch) * ch, epm_temperature: item.epm_temperature, epm_humidity: item.epm_humidity }
             });
 
-
         //Если по текущую дату, добавим последние показания
         if (Math.round(end / 60000) == Math.round(Date.now() / 60000))
             upsinfo.get((upsinfo) => {
