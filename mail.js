@@ -15,7 +15,7 @@ var mailOptions = {
 module.exports.send = (temp, hum) => {
     teg = settings["mailTeg"] || '#repl';
 
-    var newline = '\r\n;'
+    var newline = '\r\n'
 
     site = 'http://gkz.diskstation.me:15555';
 

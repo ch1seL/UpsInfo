@@ -12,6 +12,7 @@ const minSmsIntervalMinutes = settings["minSmsIntervalMinutes"] || 10;
 var OnTick = function OnTick() {
     UpsInfo.get(function(oids) {
         if ((oids.epm_temperature >= alertTemp) || (oids.epm_humidity >= alertHumMax) || (oids.epm_humidity <= alertHumMin)) {
+            console.log(oids.epm_temperature + '>=' + alertTemp, oids.epm_humidity + '>=' + alertHumMax, oids.epm_humidity + '<=' + alertHumMin);
             db.lastMailSend().exec(function(err, docs) {
                 if (err != null) console.log('Ошибка получения последней даты ' + err);
                 else {
