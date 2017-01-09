@@ -1,7 +1,7 @@
 var CronJob = require('cron').CronJob;
 var Mail = require('./mail');
 var UpsInfo = require('./upsinfo');
-var db = require('./db/db')
+var db = require('./db')
 var settings = require('./settings.json')
 
 const alertTemp = settings["alertTemp"] || 22;

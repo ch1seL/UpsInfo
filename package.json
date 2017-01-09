@@ -1,25 +1,31 @@
 {
-  "name": "foo",
-  "version": "0.0.0",
-  "private": true,
-  "scripts": {
-    "start": "node ./bin/www",
-    "watch": "supervisor --no-restart-on error --extensions www,js,jade,json -- ./bin/www"
-  },
-  "dependencies": {
-    "body-parser": "~1.15.2",
-    "cookie-parser": "~1.4.3",
-    "cron": "^1.2.1",
-    "debug": "~2.2.0",
-    "express": "~4.14.0",
-    "jade": "~1.11.0",
-    "morgan": "~1.7.0",
-    "nedb": "^1.8.0",
-    "net-snmp": "^1.1.19",
-    "nodemailer": "^2.7.0",
-    "serve-favicon": "~2.3.0"
-  },
-  "devDependencies": {
-    "supervisor": "*"
-  }
+    "name": "upsinfo",
+    "version": "0.0.1",
+    "author": {
+        "name": "Salamatov Alexsandr",
+        "email": "ch1seL@ya.ru",
+        "url": "vk.com/ch1seL"
+    },
+    "description": "Получает информация от карты IPPON SNMP, выводит график и шлет алерты в случае выхода графика за указаные границы",
+    "private": true,
+    "scripts": {
+        "start": "node ./bin/www",
+        "watch": "supervisor --no-restart-on error --extensions www,js,jade,json -- ./bin/www"
+    },
+    "dependencies": {
+        "body-parser": "~1.15.2",
+        "cookie-parser": "~1.4.3",
+        "cron": "^1.2.1",
+        "debug": "~2.2.0",
+        "express": "~4.14.0",
+        "jade": "~1.11.0",
+        "morgan": "~1.7.0",
+        "nedb": "^1.8.0",
+        "net-snmp": "^1.1.19",
+        "nodemailer": "^2.7.0",
+        "serve-favicon": "~2.3.0"
+    },
+    "devDependencies": {
+        "supervisor": "*"
+    }
 }
