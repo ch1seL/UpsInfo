@@ -43,8 +43,6 @@ function getRes(reqParam, res) {
     var start = parseInt(reqParam.start || (Date.now() - ((reqParam.hours == "" ? 24 : reqParam.hours) * 60 * 60 * 1000)));
     var end = parseInt(reqParam.end || Date.now());
 
-    now = Math.round(end / 60000) == Math.round(Date.now() / 60000);;
-
     db.getlast(start, end).exec(function(err, docs) {
         var result = docs
             .map((item) => {
@@ -52,7 +50,9 @@ function getRes(reqParam, res) {
                 return { date: Math.floor(item.date / ch) * ch, epm_temperature: item.epm_temperature, epm_humidity: item.epm_humidity }
             });
 
-        if (now)
+
+        //Если по текущую дату, добавим последние показания
+        if (Math.round(end / 60000) == Math.round(Date.now() / 60000))
             upsinfo.get((upsinfo) => {
                 result.push(upsinfo);
                 res.json(Reduce(result));
