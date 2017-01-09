@@ -8,10 +8,8 @@ router.get('/:hours(|[0-9]+)', function(req, res, next) {
     req.params.hours = req.params.hours == "" ? 24 : req.params.hours;
     req.params.start = req.params.start || Date.now() - req.params.hours * 60 * 60 * 1000;
     req.params.end = req.params.end || Date.now();
-    req.params.now = true;
 
     delete req.params.hours;
-
 
     res.render('index', req.params);
 });

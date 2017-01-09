@@ -1,8 +1,10 @@
 var nodemailer = require('nodemailer');
 var settings = require('./settings.json')
 
+var smtpServer = settings["smtpServer"] || 'cws'
+
 // create reusable transporter object using the default SMTP transport
-var transporter = nodemailer.createTransport('smtp://cws');
+var transporter = nodemailer.createTransport('smtp://' + smtpServer);
 
 // setup e-mail data with unicode symbols
 var mailOptions = {
