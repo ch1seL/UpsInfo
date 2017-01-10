@@ -12,6 +12,5 @@
     "mailSubject": "Внимание! Климат в серверной!",
     "mailTeg": "#repl",
     "historyHours": "24",
-    "timezoneOffset": -4,
     "site": "http://gkz.diskstation.me:15555"
 }

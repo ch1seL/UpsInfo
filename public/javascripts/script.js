@@ -1,14 +1,12 @@
 function dateChanged(el, val, timezoneOffset) {
     el.setAttribute('value', val);
 
-    a = document.getElementById('dateForm');
-    startDate = document.getElementById('dateStart').getAttribute('value');
-    endDate = document.getElementById('dateEnd').getAttribute('value');
+    var a = document.getElementById('dateForm');
+    var startDate = document.getElementById('dateStart').getAttribute('value');
+    var endDate = document.getElementById('dateEnd').getAttribute('value');
 
-
-    startDate = getDateWithOrWithoutOffset(+startDate, true);
-    endDate = getDateWithOrWithoutOffset(+endDate, true);
-
+    startDate = getDateWithOrWithoutOffset((new Date(startDate)).getTime(), true);
+    endDate = getDateWithOrWithoutOffset((new Date(endDate)).getTime(), true);
 
     a.setAttribute('href', '/' + startDate + '-' + endDate);
 }
@@ -20,10 +18,8 @@ function getDateWithOrWithoutOffset(dateUtc, without = false) {
 }
 
 function getISODateWithOrWithoutOffset(dateUtc, without = false) {
-    var timezoneOffset = (new Date()).getTimezoneOffset() * 60 * 1000;
-    if (!without) timezoneOffset = -timezoneOffset;
     var dateWithOffset = new Date();
-    dateWithOffset.setTime(+dateUtc + timezoneOffset);    
+    dateWithOffset.setTime(getDateWithOrWithoutOffset(+dateUtc, without));
     return dateWithOffset.toISOString().substring(0, 16);
 }
 
