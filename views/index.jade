@@ -21,8 +21,8 @@ html
     div(class="wrapper")
       div(class="left_block")
         p История за период:
-        input(id="dateStart",name="dateStart",type="datetime-local",onchange="dateChanged(this,value,#{timezoneOffset})",value="#{startDate}")    
-        input(id="dateEnd",name="dateEnd",type="datetime-local",onchange="dateChanged(this,value,#{timezoneOffset})",value="#{endDate}")
+        input(id="dateStart",name="dateStart",type="datetime-local",onchange="dateChanged(this,value,#{timezoneOffset})",value="getISODateWithOrWithoutOffset(#{startDate})")    
+        input(id="dateEnd",name="dateEnd",type="datetime-local",onchange="dateChanged(this,value,#{timezoneOffset})",value="getISODateWithOrWithoutOffset(#{endDate})")
         p
         a(id="dateForm" href="/#{start}-#{end}") Загрузить  
       div(class="right_block")
