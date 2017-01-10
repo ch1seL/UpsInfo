@@ -9,20 +9,20 @@ html
     script(src='/javascripts/script.js', type='text/javascript')
   body
     div(id="parameters" style="visibility:hidden" start="#{start}" end="#{end}")
-rrr
+
     - startDate=new Date();
-    - startDate.setTime(start - startDate.getTimezoneOffset()*60*1000);
+    - startDate.setTime(start - timezoneOffset*60*60*1000);
     - startDate=startDate.toISOString().substring(0,16)
 
     - endDate=new Date();
-    - endDate.setTime(end - endDate.getTimezoneOffset()*60*1000);
-    - endDate=endDate.toISOString().substring(0,16)
+    - endDate.setTime(end - timezoneOffset*60*60*1000);
+    - endDate=endDate.toISOString().substring(0,16)    
 
     div(class="wrapper")
       div(class="left_block")
         p История за период:
-        input(id="dateStart",name="dateStart",type="datetime-local",onchange="dateChanged(this,value)",value="#{startDate}")    
-        input(id="dateEnd",name="dateEnd",type="datetime-local",onchange="dateChanged(this,value)",value="#{endDate}")
+        input(id="dateStart",name="dateStart",type="datetime-local",onchange="dateChanged(this,value,#{timezoneOffset})",value="#{startDate}")    
+        input(id="dateEnd",name="dateEnd",type="datetime-local",onchange="dateChanged(this,value,#{timezoneOffset})",value="#{endDate}")
         p
         a(id="dateForm" href="/#{start}-#{end}") Загрузить  
       div(class="right_block")

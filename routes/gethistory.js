@@ -70,5 +70,4 @@ router.get('/:start([0-9]+)-:end([0-9]+)', function(req, res, next) {
     getRes(req.params, res);
 });
 
-
 module.exports = router;

@@ -11,11 +11,14 @@ router.get('/:hours(|[0-9]+)', function(req, res, next) {
 
     delete req.params.hours;
 
+    req.params.timezoneOffset = settings.timezoneOffset || 4;
+
+    console.log(req.params);
     res.render('index', req.params);
 });
 
 router.get('/:start([0-9]+)-:end([0-9]+)', function(req, res, next) {
-
+    req.params.timezoneOffset = settings.timezoneOffset || 4;
     res.render('index', req.params);
 });
 
