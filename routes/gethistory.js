@@ -6,7 +6,7 @@ var settings = require('../settings.json')
 
 function Reduce(result) {
     count = 0;
-    result = result.reduce(function(acc, cur, index) {
+    result = result.reduce(function (acc, cur, index) {
 
         if (acc.length == 0) {
             acc.push({ date: cur.date, epm_temperature: cur.epm_temperature, epm_humidity: cur.epm_humidity });
@@ -43,7 +43,7 @@ function getRes(reqParam, res) {
     var start = parseInt(reqParam.start || (Date.now() - ((reqParam.hours == "" ? 24 : reqParam.hours) * 60 * 60 * 1000)));
     var end = parseInt(reqParam.end || Date.now());
 
-    db.getlast(start, end).exec(function(err, docs) {
+    db.getlast(start, end).exec(function (err, docs) {
         var result = docs
             .map((item) => {
                 var ch = (docs[docs.length - 1].date - docs[0].date) / 200;
@@ -53,20 +53,21 @@ function getRes(reqParam, res) {
         //Если по текущую дату, добавим последние показания
         if (Math.round(end / 60000) == Math.round(Date.now() / 60000))
             upsinfo.get((upsinfo) => {
-                result.push(upsinfo);
+                if (upsinfo !== null) result.push(upsinfo);
                 res.json(Reduce(result));
             });
-        else res.json(Reduce(result));
+        else
+            res.json(Reduce(result));
     });
 }
 
 /* GET gethistory. */
-router.get('/:hours(|[0-9]+)', function(req, res, next) {
+router.get('/:hours(|[0-9]+)', function (req, res, next) {
     getRes(req.params, res);
 });
 
 /* GET gethistory. */
-router.get('/:start([0-9]+)-:end([0-9]+)', function(req, res, next) {
+router.get('/:start([0-9]+)-:end([0-9]+)', function (req, res, next) {
     getRes(req.params, res);
 });
 

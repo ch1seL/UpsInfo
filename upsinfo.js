@@ -6,7 +6,7 @@ var upsIP = settings["upsIP"] || "10.118.134.46";
 var options = {
     port: 161,
     retries: 1,
-    timeout: 5000,
+    timeout: 1000,
     transport: "udp4",
     trapPort: 162,
     version: snmp.Version2c
@@ -28,8 +28,9 @@ var oids = [
 module.exports.get = function (callback) {
     session.get(oids.map(function (item) { return item.oid; }), function (error, varbinds) {
         if (error) {
-            console.error(error);
-            callback(error);
+            error.type = "snmp";
+            var res = { date: new Date().getTime(), error: error };
+            callback(res);
         } else {
             for (var i = 0; i < varbinds.length; i++)
                 if (snmp.isVarbindError(varbinds[i]))
@@ -39,10 +40,8 @@ module.exports.get = function (callback) {
                         varbinds[i].oid === "1.3.6.1.4.1.935.10.1.1.6.1.1.0" ? varbinds[i].value / 10 : varbinds[i].value;
                 }
 
-            res = { date: new Date().getTime() };
-
+            var res = { date: new Date().getTime() };
             oids.forEach((oid) => { res[oid.name] = oid.value })
-
             callback(res);
         }
     });

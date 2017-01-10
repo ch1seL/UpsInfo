@@ -27,6 +27,9 @@ function getHistory(callback) {
             if (this.status == 200) {
                 var response = JSON.parse(this.responseText);
                 res = response.
+                    filter((item) => {
+                        return item.date != undefined && item.epm_temperature != undefined && item.epm_humidity != undefined
+                    }).
                     map((item) => {
                         date = new Date(item.date)
                         return [date.toLocaleString("ru", dateFormatOptions), item.epm_temperature, item.epm_humidity];
@@ -36,6 +39,7 @@ function getHistory(callback) {
             }
             else {
                 console.log('Сетевая ошибка!');
+                callback(null);
             }
         }
     }
@@ -45,11 +49,13 @@ function getHistory(callback) {
 function drawChart() {
     getHistory(function (res) {
 
-        lastRes = res[res.length - 1];
-        chartDivTemp = document.getElementById('chart_div_temp');
-        chartTemp = new google.visualization.LineChart(chartDivTemp);
-        dataTemp = google.visualization.arrayToDataTable([['Дата', 'Температура']].concat(res.map((item) => [item[0], +item[1].toFixed(1)])));
-        classicOptionsTemp = {
+        if (res == null) return;
+        
+        var lastRes = res[res.length - 1];
+        var chartDivTemp = document.getElementById('chart_div_temp');
+        var chartTemp = new google.visualization.LineChart(chartDivTemp);
+        var dataTemp = google.visualization.arrayToDataTable([['Дата', 'Температура']].concat(res.map((item) => [item[0], +item[1].toFixed(1)])));
+        var classicOptionsTemp = {
             title: 'Температура в серверной ' + lastRes[1].toFixed(1) || "",
             curveType: 'function',
             width: 1000,

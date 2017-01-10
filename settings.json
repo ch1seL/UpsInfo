@@ -9,8 +9,9 @@
     "smtpServer": "cws.gkz.udmnp.ru",
     "mailFrom": "\"Server UPS Info\" <sd@kombi-korm.ru>",
     "mailTo": "mail2sms@mcommunicator.ru;ch1seL@ya.ru;salamatovae@kombi-korm.ru",
-    "mailSubject": "Рассылка",
+    "mailSubject": "Внимание! Климат в серверной!",
     "mailTeg": "#repl",
     "historyHours": "24",
-    "timezoneOffset": -4
+    "timezoneOffset": -4,
+    "site": "http://gkz.diskstation.me:15555"
 }
