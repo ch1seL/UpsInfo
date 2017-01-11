@@ -1,16 +1,17 @@
 {
     "upsIP": "10.118.134.46",
     "httpPort": 3001,
-    "alertTemp": 28,
+    "alertTemp": 26,
     "alertHumMin": 20,
     "alertHumMax": 50,
     "minSmsIntervalMinutes": 10,
+    "minSmsIntervalMinutesIfTempNotIncrease": 480,
     "cronTime": "*/2 * * * * *",
     "smtpServer": "cws.gkz.udmnp.ru",
     "mailFrom": "\"Server UPS Info\" <sd@kombi-korm.ru>",
     "mailTo": "mail2sms@mcommunicator.ru;ch1seL@ya.ru;salamatovae@kombi-korm.ru",
     "mailSubject": "Внимание! Климат в серверной!",
     "mailTeg": "#repl",
-    "historyHours": "24",
+    "defaultHours": "24",
     "site": "http://gkz.diskstation.me:15555"
 }

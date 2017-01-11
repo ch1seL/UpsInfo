@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 var db = require('../db');
 var upsinfo = require('../upsinfo');
-var settings = require('../settings.json')
 
 function Reduce(result) {
     count = 0;

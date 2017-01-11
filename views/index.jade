@@ -10,17 +10,14 @@ html
   body(onload="setValue()")
     div(id="parameters" style="visibility:hidden" start="#{start}" end="#{end}")
 
-    div(class="wrapper")
-      div(class="left_block")
+    .container
+      .column1
         p История за период:
-        //- input(id="dateStart",name="dateStart",type="datetime-local",onchange="dateChanged(this,value)",value="getISODateWithOrWithoutOffset(#{startDate})")    
-        //- input(id="dateEnd",name="dateEnd",type="datetime-local",onchange="dateChanged(this,value)",value="getISODateWithOrWithoutOffset(#{endDate})")
-        input(id="dateStart",name="dateStart",type="datetime-local",onchange="dateChanged(this,value)")    
-        input(id="dateEnd",name="dateEnd",type="datetime-local",onchange="dateChanged(this,value)")
+        input(id='dateStart',name='dateStart',type='datetime-local',onchange='dateChanged(this,value)') 
+        input(id='dateEnd',name='dateEnd',type='datetime-local',onchange='dateChanged(this,value)')
         p
         a(id="dateForm" href="/#{start}-#{end}") Загрузить  
-
-      div(class="right_block")            
+      .column2
         br
         a(href="/1") История за последний час 
         br
@@ -32,8 +29,15 @@ html
         br
         br
         a(href="/8760") История за последний год 
+      .column3
+        p Настройки:
+        p alertTemp: #{settings.alertTemp}  
+        p alertHumMin: #{settings.alertHumMin}
+        p alertHumMax: #{settings.alertHumMax}
+        p minSmsIntervalMinutes: #{settings.minSmsIntervalMinutes}
+        p cronTime: #{settings.cronTime}
+
 
     div(style="clear:both;")
-
     div(id="chart_div_temp")
     div(id="chart_div_hum")

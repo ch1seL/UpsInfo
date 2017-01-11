@@ -2,12 +2,6 @@ var CronJob = require('cron').CronJob;
 var Mail = require('./mail');
 var UpsInfo = require('./upsinfo');
 var db = require('./db')
-var settings = require('./settings.json')
-
-const alertTemp = settings["alertTemp"] || 22;
-const alertHumMin = settings["alertHumMin"] || 20;
-const alertHumMax = settings["alertHumMax"] || 50;
-const minSmsIntervalMinutes = settings["minSmsIntervalMinutes"] || 10;
 
 /**
  * Removes a module from the cache
@@ -53,16 +47,35 @@ function searchCache(moduleName, callback) {
         }(mod));
     }
 };
-var OnTick = function OnTick() {
-    purgeCache('./settings.json');    
+
+var OnTick = function OnTick(test) {
+    purgeCache('./settings.json');
+
+    var settings = require('./settings.json');
+
+    if (this.cronTime.source != (settings.cronTime || '00 * * * * *')) {
+        this.stop();
+        new CronJob({
+            cronTime: settings.cronTime || '00 * * * * *',
+            onTick: OnTick,
+            start: true,
+            timeZone: 'Europe/Samara'
+        });
+    }
+
     UpsInfo.get(function(oids) {
-        if (oids.error === undefined && ((oids.epm_temperature >= alertTemp) || (oids.epm_humidity >= alertHumMax) || (oids.epm_humidity <= alertHumMin))) {
-            console.log(oids.epm_temperature + '>=' + alertTemp, oids.epm_humidity + '>=' + alertHumMax, oids.epm_humidity + '<=' + alertHumMin);
+        if (oids.error === undefined && ((oids.epm_temperature >= settings.alertTemp || 22) || (oids.epm_humidity >= settings.alertHumMax || 60) || (oids.epm_humidity <= settings.alertHumMin || 20))) {
             db.lastMailSend().exec(function(err, docs) {
                 if (err != null) console.log('Ошибка получения последней даты ' + err);
                 else {
-                    //Рассылка СМС не чаще раза в minSmsIntervalMinutes                    
-                    oids.mailsend = ((docs[0] == undefined) || (docs[0].date == undefined) || (Math.round((Date.now() - docs[0].date) / 60000) >= minSmsIntervalMinutes)) ? true : false;
+
+                    var minSmsIntervalMinutes = settings.minSmsIntervalMinutes || 10;
+                    var minSmsIntervalMinutesIfTempNotIncrease = settings.minSmsIntervalMinutesIfTempNotIncrease || 60;
+
+                    //отправим почту если запись в бд не найдена                    
+                    oids.mailsend = (docs[0] == undefined) || (docs[0].date == undefined);
+                    oids.mailsend = oids.mailsend || (Math.round((Date.now() - docs[0].date) / 60000) >= minSmsIntervalMinutesIfTempNotIncrease);
+                    oids.mailsend = oids.mailsend || (((docs[0].epm_temperature || 0) < oids.epm_temperature) && (Math.round((Date.now() - docs[0].date) / 60000) >= minSmsIntervalMinutes));
 
                     if (oids.mailsend) Mail.send(oids.epm_temperature, oids.epm_humidity);
                     db.insert(oids);
@@ -74,7 +87,7 @@ var OnTick = function OnTick() {
 }
 
 module.exports.Job = new CronJob({
-    cronTime: settings["cronTime"] || '00 * * * * *',
+    cronTime: require('./settings.json').cronTime || '00 * * * * *',
     onTick: OnTick,
     start: true,
     timeZone: 'Europe/Samara'

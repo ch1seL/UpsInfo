@@ -8,19 +8,31 @@ a {
     color: #00B7FF;
 }
 
-div.wrapper {
-    width: 500px;
+.container {
+    background: #ccc;
+    width: 1000px;
+    margin: 0 auto;
     text-align: center;
-    left: 750px;
-    margin-left: 250px;
 }
 
-div.left_block {
+.column2 {
     float: left;
     width: 300px;
+    margin: 16px;
 }
 
-div.right_block {
-    float: right;
-    width: 200px;
+.column1 {
+    float: left;
+    width: 300px;
+    margin: 16px;
+}
+
+.column3 {
+    float: left;
+    width: 300px;
+    margin: 16px;
+}
+
+.clear {
+    clear: both;
 }
