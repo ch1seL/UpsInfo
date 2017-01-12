@@ -7,7 +7,7 @@ html
     script(src='https://www.gstatic.com/charts/loader.js', type='text/javascript')
     script(src='/javascripts/chart.js', type='text/javascript')    
     script(src='/javascripts/script.js', type='text/javascript')
-  body(onload="setValue()")
+  body
     div(id="parameters" style="visibility:hidden" start="#{start}" end="#{end}")
 
     .container
@@ -36,6 +36,7 @@ html
         p alertHumMax: #{settings.alertHumMax}
         p minSmsIntervalMinutes: #{settings.minSmsIntervalMinutes}
         p cronTime: #{settings.cronTime}
+      .clear
 
 
     div(style="clear:both;")

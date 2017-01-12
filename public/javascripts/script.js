@@ -23,7 +23,7 @@ function getISODateWithOrWithoutOffset(dateUtc, without = false) {
     return dateWithOffset.toISOString().substring(0, 16);
 }
 
-function setValue() {
+function start() {
     var parameters = document.getElementById('parameters');
 
     start = end = "undefined";
@@ -34,4 +34,8 @@ function setValue() {
 
     document.getElementById('dateStart').setAttribute('value', getISODateWithOrWithoutOffset(start));
     document.getElementById('dateEnd').setAttribute('value', getISODateWithOrWithoutOffset(end));
+}
+
+window.onload = function() {
+    start();
 }

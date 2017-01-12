@@ -63,6 +63,8 @@ var OnTick = function OnTick(test) {
         });
     }
 
+    console.log(settings.alertTemp);
+
     UpsInfo.get(function(oids) {
         if (oids.error === undefined && ((oids.epm_temperature >= settings.alertTemp || 22) || (oids.epm_humidity >= settings.alertHumMax || 60) || (oids.epm_humidity <= settings.alertHumMin || 20))) {
             db.lastMailSend().exec(function(err, docs) {
@@ -70,10 +72,11 @@ var OnTick = function OnTick(test) {
                 else {
 
                     var minSmsIntervalMinutes = settings.minSmsIntervalMinutes || 10;
-                    var minSmsIntervalMinutesIfTempNotIncrease = settings.minSmsIntervalMinutesIfTempNotIncrease || 60;
+                    var minSmsIntervalMinutesIfTempNotIncrease = settings.minSmsIntervalMinutesIfTempNotIncrease || 240;
 
                     //отправим почту если запись в бд не найдена                    
                     oids.mailsend = (docs[0] == undefined) || (docs[0].date == undefined);
+
                     oids.mailsend = oids.mailsend || (Math.round((Date.now() - docs[0].date) / 60000) >= minSmsIntervalMinutesIfTempNotIncrease);
                     oids.mailsend = oids.mailsend || (((docs[0].epm_temperature || 0) < oids.epm_temperature) && (Math.round((Date.now() - docs[0].date) / 60000) >= minSmsIntervalMinutes));
 
