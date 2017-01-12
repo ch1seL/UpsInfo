@@ -63,10 +63,15 @@ var OnTick = function OnTick(test) {
         });
     }
 
-    console.log(settings.alertTemp);
+    var alertTemp = settings.alertTemp || 22;
+    var alertHumMax = settings.alertHumMax || 60;
+    var alertHumMin = settings.alertHumMin || 20;
+
+
 
     UpsInfo.get(function(oids) {
-        if (oids.error === undefined && ((oids.epm_temperature >= settings.alertTemp || 22) || (oids.epm_humidity >= settings.alertHumMax || 60) || (oids.epm_humidity <= settings.alertHumMin || 20))) {
+        console.log((oids.error === undefined && ((oids.epm_temperature >= alertTemp) || (oids.epm_humidity >= alertHumMax) || (oids.epm_humidity <= alertHumMin))));
+        if (oids.error === undefined && ((oids.epm_temperature >= alertTemp) || (oids.epm_humidity >= alertHumMax) || (oids.epm_humidity <= alertHumMin))) {
             db.lastMailSend().exec(function(err, docs) {
                 if (err != null) console.log('Ошибка получения последней даты ' + err);
                 else {

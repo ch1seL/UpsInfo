@@ -1,7 +1,16 @@
 var express = require('express');
+var db = require('../db')
+
 var router = express.Router();
 
 /* GET home page. */
+
+function Render(res, reqparams) {
+    db.lastMailSend().exec(function(err, docs) {
+        if (err != null) reqparams.lastdate = doc[0] === undefined ? undefined : doc[0].date || "date undefined";
+        res.render('index', reqparams);
+    });
+}
 
 router.get('/:hours(|[0-9]+)', function(req, res, next) {
     var settings = require('../settings.json');
@@ -11,13 +20,12 @@ router.get('/:hours(|[0-9]+)', function(req, res, next) {
     req.params.end = req.params.end || Date.now();
     delete req.params.hours;
     req.params.settings = settings;
-
-    res.render('index', req.params);
+    Render(res, req.params);
 });
 
 router.get('/:start([0-9]+)-:end([0-9]+)', function(req, res, next) {
     req.params.settings = require('../settings.json');
-    res.render('index', req.params);
+    Render(res, req.params);
 });
 
 module.exports = router;
