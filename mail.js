@@ -15,6 +15,7 @@ module.exports.send = (temp, hum) => {
             'Влажность:' + hum + newline +
             site
     };
+
     var smtpServer = settings.smtpServer || 'cws'
     var transporter = nodemailer.createTransport('smtp://' + smtpServer);
     transporter.sendMail(mailOptions, function(error, info) {

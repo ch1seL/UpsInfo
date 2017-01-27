@@ -6,7 +6,7 @@ function dateChanged(el, val, timezoneOffset) {
     var endDate = document.getElementById('dateEnd').getAttribute('value');
 
     startDate = getDateWithOrWithoutOffset((new Date(startDate)).getTime(), true);
-    endDate = getDateWithOrWithoutOffset((new Date(endDate)).getTime(), true);
+    endDate = getDateWithOrWithoutOffset((new Date(endDate)).getTime(), true) + 59999;
 
     a.setAttribute('href', '/' + startDate + '-' + endDate);
 }

@@ -70,7 +70,6 @@ var OnTick = function OnTick(test) {
 
 
     UpsInfo.get(function(oids) {
-        console.log((oids.error === undefined && ((oids.epm_temperature >= alertTemp) || (oids.epm_humidity >= alertHumMax) || (oids.epm_humidity <= alertHumMin))));
         if (oids.error === undefined && ((oids.epm_temperature >= alertTemp) || (oids.epm_humidity >= alertHumMax) || (oids.epm_humidity <= alertHumMin))) {
             db.lastMailSend().exec(function(err, docs) {
                 if (err != null) console.log('Ошибка получения последней даты ' + err);
@@ -81,7 +80,6 @@ var OnTick = function OnTick(test) {
 
                     //отправим почту если запись в бд не найдена                    
                     oids.mailsend = (docs[0] == undefined) || (docs[0].date == undefined);
-
                     oids.mailsend = oids.mailsend || (Math.round((Date.now() - docs[0].date) / 60000) >= minSmsIntervalMinutesIfTempNotIncrease);
                     oids.mailsend = oids.mailsend || (((docs[0].epm_temperature || 0) < oids.epm_temperature) && (Math.round((Date.now() - docs[0].date) / 60000) >= minSmsIntervalMinutes));
 

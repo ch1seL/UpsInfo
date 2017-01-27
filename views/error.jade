@@ -1,7 +1,9 @@
-extends ../node_modules/jade-bootstrap/layouts/starter
-append styles
-	link(href="/css/style.css", rel="stylesheet")
-block body
-	h1= message
-	h2= error.status
-	pre #{error.stack}
+doctype html
+html
+	head
+		title= title
+		link(href='/stylesheets/style.css', rel='stylesheet')
+	body
+		h1=message
+		h2=error.status
+		pre #{error.stack}
