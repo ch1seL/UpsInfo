@@ -5,7 +5,7 @@ var upsinfo = require('../upsinfo');
 
 function Reduce(result) {
     count = 0;
-    result = result.reduce(function (acc, cur, index) {
+    result = result.reduce(function(acc, cur, index) {
 
 
         if (acc.length == 0) {
@@ -43,7 +43,7 @@ function getRes(reqParam, res) {
     var start = parseInt(reqParam.start || (Date.now() - ((reqParam.hours == "" ? 24 : reqParam.hours) * 60 * 60 * 1000)));
     var end = parseInt(reqParam.end || Date.now());
 
-    db.getlast(start, end).exec(function (err, docs) {
+    db.getlast(start, end).exec(function(err, docs) {
         var result = docs
             .map((item) => {
                 var ch = (docs[docs.length - 1].date - docs[0].date) / 200;
@@ -62,12 +62,12 @@ function getRes(reqParam, res) {
 }
 
 /* GET gethistory. */
-router.get('/:hours(|[0-9]+)', function (req, res, next) {
+router.get('/:hours(|[0-9]+)', function(req, res, next) {
     getRes(req.params, res);
 });
 
 /* GET gethistory. */
-router.get('/:start([0-9]+)-:end([0-9]+)', function (req, res, next) {
+router.get('/:start([0-9]+)-:end([0-9]+)', function(req, res, next) {
     getRes(req.params, res);
 });
 

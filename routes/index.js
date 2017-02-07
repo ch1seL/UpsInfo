@@ -6,10 +6,7 @@ var router = express.Router();
 /* GET home page. */
 
 function Render(res, reqparams) {
-    db.lastMailSend().exec(function(err, docs) {
-        if (err != null) reqparams.lastdate = doc[0] === undefined ? undefined : doc[0].date || "date undefined";
-        res.render('index', reqparams);
-    });
+    res.render('index', reqparams);
 }
 
 router.get('/:hours(|[0-9]+)', function(req, res, next) {

@@ -13,7 +13,7 @@ html
     .container
       .column1
         p История за период:
-        input(id='dateStart',name='dateStart',type='datetime-local',onchange='dateChanged(this,value)') 
+        input(id='dateStart',name='dateStart',type='datetime-local',onchange='dateChanged(this,value)')
         input(id='dateEnd',name='dateEnd',type='datetime-local',onchange='dateChanged(this,value)')
         p
         a(id="dateForm" href="/#{start}-#{end}") Загрузить  
@@ -38,8 +38,7 @@ html
         p alertHumMin: #{settings.alertHumMin}
         p alertHumMax: #{settings.alertHumMax}
         p minSmsIntervalMinutes: #{settings.minSmsIntervalMinutes}
-        p cronTime: #{settings.cronTime}
-        p lastDate: #{lastdate}
+        p cronTime: #{settings.cronTime}        
       .clear
 
 
