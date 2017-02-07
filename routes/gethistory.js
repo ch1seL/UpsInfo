@@ -7,6 +7,7 @@ function Reduce(result) {
     count = 0;
     result = result.reduce(function (acc, cur, index) {
 
+
         if (acc.length == 0) {
             acc.push({ date: cur.date, epm_temperature: cur.epm_temperature, epm_humidity: cur.epm_humidity });
             count = 1;

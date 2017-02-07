@@ -35,7 +35,7 @@ var Datastore = require('nedb');
 var db = new Datastore({ filename: 'db/upshistory.db', autoload: true });
 var db2 = new Datastore({ filename: 'db/upshistory_shrink.db', autoload: true });
 
-db.find('').sort({ date: -1 }).exec((err, docs) => {
+db.find().sort({ date: -1 }).exec((err, docs) => {
     var newdocs = docs.map((item) => {
         var ch = 60 * 1000;
         item.date = item.date - item.date % ch;
@@ -48,3 +48,4 @@ db.find('').sort({ date: -1 }).exec((err, docs) => {
         db2.insert(item);
     })
 });
+

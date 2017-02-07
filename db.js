@@ -15,3 +15,7 @@ module.exports.getlast = function(dateStart, dateEnd) {
 module.exports.lastMailSend = function() {
     return db.find({ mailsend: true }).sort({ date: -1 }).limit(1);
 }
+
+module.exports.startDate = function() {
+    return db.find().sort({ date: 1 }).limit(1);
+}
