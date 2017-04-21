@@ -9,7 +9,15 @@ function Reduce(result) {
 
 
         if (acc.length == 0) {
-            acc.push({ date: cur.date, epm_temperature: cur.epm_temperature, epm_humidity: cur.epm_humidity });
+            acc.push({
+                date: cur.date,
+                epm_temperature: cur.epm_temperature,
+                epm_humidity: cur.epm_humidity,
+                epm_temperature_max: cur.epm_temperature,
+                epm_temperature_min: cur.epm_temperature,
+                epm_humidity_max: cur.epm_humidity,
+                epm_humidity_min: cur.epm_humidity
+            });
             count = 1;
             return acc;
         }
@@ -20,11 +28,23 @@ function Reduce(result) {
             acc[accIndex].epm_temperature += cur.epm_temperature;
             acc[accIndex].epm_humidity += cur.epm_humidity;
             count++;
+            acc[accIndex].epm_temperature_max = Math.max(acc[accIndex].epm_temperature_max, cur.epm_temperature);
+            acc[accIndex].epm_temperature_min = Math.min(acc[accIndex].epm_temperature_min, cur.epm_temperature);
+            acc[accIndex].epm_humidity_max = Math.max(acc[accIndex].epm_humidity_max, cur.epm_humidity);
+            acc[accIndex].epm_humidity_min = Math.min(acc[accIndex].epm_humidity_min, cur.epm_humidity);
         } else {
             acc[accIndex].epm_temperature /= count;
             acc[accIndex].epm_humidity /= count;
 
-            acc.push({ date: cur.date, epm_temperature: cur.epm_temperature, epm_humidity: cur.epm_humidity });
+            acc.push({
+                date: cur.date,
+                epm_temperature: cur.epm_temperature,
+                epm_humidity: cur.epm_humidity,
+                epm_temperature_max: cur.epm_temperature,
+                epm_temperature_min: cur.epm_temperature,
+                epm_humidity_max: cur.epm_humidity,
+                epm_humidity_min: cur.epm_humidity
+            });
             count = 1;
         }
 
@@ -47,7 +67,7 @@ function getRes(reqParam, res) {
         var result = docs
             .map((item) => {
                 var ch = (docs[docs.length - 1].date - docs[0].date) / 200;
-                return { date: Math.floor(item.date / ch) * ch, epm_temperature: item.epm_temperature, epm_humidity: item.epm_humidity }
+                return { date: Math.floor(item.date / ch) * ch, epm_temperature: item.epm_temperature, epm_humidity: item.epm_humidity, epm_temperature_max: item.epm_temperature_max }
             });
 
         //Если по текущую дату, добавим последние показания

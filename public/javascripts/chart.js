@@ -1,4 +1,3 @@
-
 google.charts.load('current', { 'packages': ['line', 'corechart'] });
 google.charts.setOnLoadCallback(drawChart);
 
@@ -22,22 +21,25 @@ function getHistory(callback) {
 
     var request = new XMLHttpRequest();
     request.open('GET', '/gethistory/' + urlParams);
-    request.onreadystatechange = function (e) {
+    request.onreadystatechange = function(e) {
         if (this.readyState == 4) {
             if (this.status == 200) {
                 var response = JSON.parse(this.responseText);
                 res = response.
-                    filter((item) => {
-                        return item.date != undefined && item.epm_temperature != undefined && item.epm_humidity != undefined
-                    }).
-                    map((item) => {
-                        date = new Date(item.date)
-                        return [date.toLocaleString("ru", dateFormatOptions), item.epm_temperature, item.epm_humidity];
-                    });
+                filter((item) => {
+                    return item.date != undefined && item.epm_temperature != undefined && item.epm_humidity != undefined
+                }).
+                map((item) => {
+                    date = new Date(item.date)
+                    return [date.toLocaleString("ru", dateFormatOptions),
+                        item.epm_temperature, item.epm_humidity,
+                        item.epm_temperature_max, item.epm_temperature_min,
+                        item.epm_humidity_max, item.epm_humidity_min
+                    ];
+                });
 
                 callback(res);
-            }
-            else {
+            } else {
                 console.log('Сетевая ошибка!');
                 callback(null);
             }
@@ -47,14 +49,16 @@ function getHistory(callback) {
 }
 
 function drawChart() {
-    getHistory(function (res) {
+    getHistory(function(res) {
 
         if (res == null) return;
-        
+
         var lastRes = res[res.length - 1];
         var chartDivTemp = document.getElementById('chart_div_temp');
         var chartTemp = new google.visualization.LineChart(chartDivTemp);
-        var dataTemp = google.visualization.arrayToDataTable([['Дата', 'Температура']].concat(res.map((item) => [item[0], +item[1].toFixed(1)])));
+        var dataTemp = google.visualization.arrayToDataTable([
+            ['Дата', 'Средняя', 'Макс', 'Мин']
+        ].concat(res.map((item) => [item[0], +item[1].toFixed(1), +item[3].toFixed(1), +item[4].toFixed(1)])));
         var classicOptionsTemp = {
             title: 'Температура в серверной ' + lastRes[1].toFixed(1) || "",
             curveType: 'function',
@@ -66,14 +70,18 @@ function drawChart() {
             },
             vAxes: {
                 // Adds titles to each axis.
-                0: { title: 'Температура', viewWindow: {} }
+                0: { title: 'Средняя', viewWindow: {} },
+                1: { title: 'Макс', viewWindow: {} },
+                2: { title: 'Мин', viewWindow: {} }
             }
         }
         chartTemp.draw(dataTemp, classicOptionsTemp);
 
         chartDivHum = document.getElementById('chart_div_hum');
         chartHum = new google.visualization.LineChart(chartDivHum);
-        dataHum = google.visualization.arrayToDataTable([['Дата', 'Влажность']].concat(res.map((item) => [item[0], +item[2].toFixed(0)])));
+        dataHum = google.visualization.arrayToDataTable([
+            ['Дата', 'Средняя', 'Макс', 'Мин']
+        ].concat(res.map((item) => [item[0], +item[2].toFixed(0), +item[5].toFixed(0), +item[6].toFixed(0)])));
         classicOptionsHum = {
             title: 'Влажность в серверной ' + lastRes[2].toFixed(0) || "",
             curveType: 'function',
@@ -85,7 +93,9 @@ function drawChart() {
             },
             vAxes: {
                 // Adds titles to each axis.
-                0: { title: 'Влажность', viewWindow: {} }
+                0: { title: 'Средняя', viewWindow: {} },
+                1: { title: 'Макс', viewWindow: {} },
+                2: { title: 'Мин', viewWindow: {} }
             }
         }
         chartHum.draw(dataHum, classicOptionsHum);
