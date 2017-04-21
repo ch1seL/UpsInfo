@@ -5,56 +5,42 @@ var upsinfo = require('../upsinfo');
 
 function Reduce(result) {
     count = 0;
-    result = result.reduce(function(acc, cur, index) {
+    result = result
+        .filter((item) => (item.epm_temperature != null) && (item.epm_humidity != null))
+        .reduce(function(acc, cur, index) {
 
 
-        if (acc.length == 0) {
-            acc.push({
-                date: cur.date,
-                epm_temperature: cur.epm_temperature,
-                epm_humidity: cur.epm_humidity,
-                epm_temperature_max: cur.epm_temperature,
-                epm_temperature_min: cur.epm_temperature,
-                epm_humidity_max: cur.epm_humidity,
-                epm_humidity_min: cur.epm_humidity
-            });
-            count = 1;
+            if (acc.length == 0) {
+                acc.push({
+                    date: cur.date,
+                    epm_temperature_max: cur.epm_temperature,
+                    epm_temperature_min: cur.epm_temperature,
+                    epm_humidity_max: cur.epm_humidity,
+                    epm_humidity_min: cur.epm_humidity
+                });
+                count = 1;
+                return acc;
+            }
+
+            accIndex = acc.length - 1;
+
+            if (acc[accIndex].date == cur.date) {
+                acc[accIndex].epm_temperature_max = Math.max(acc[accIndex].epm_temperature_max, cur.epm_temperature);
+                acc[accIndex].epm_temperature_min = Math.min(acc[accIndex].epm_temperature_min, cur.epm_temperature);
+                acc[accIndex].epm_humidity_max = Math.max(acc[accIndex].epm_humidity_max, cur.epm_humidity);
+                acc[accIndex].epm_humidity_min = Math.min(acc[accIndex].epm_humidity_min, cur.epm_humidity);
+            } else {
+                acc.push({
+                    date: cur.date,
+                    epm_temperature_max: cur.epm_temperature,
+                    epm_temperature_min: cur.epm_temperature,
+                    epm_humidity_max: cur.epm_humidity,
+                    epm_humidity_min: cur.epm_humidity
+                });
+                count = 1;
+            }
             return acc;
-        }
-
-        accIndex = acc.length - 1;
-
-        if (acc[accIndex].date == cur.date) {
-            acc[accIndex].epm_temperature += cur.epm_temperature;
-            acc[accIndex].epm_humidity += cur.epm_humidity;
-            count++;
-            acc[accIndex].epm_temperature_max = Math.max(acc[accIndex].epm_temperature_max, cur.epm_temperature);
-            acc[accIndex].epm_temperature_min = Math.min(acc[accIndex].epm_temperature_min, cur.epm_temperature);
-            acc[accIndex].epm_humidity_max = Math.max(acc[accIndex].epm_humidity_max, cur.epm_humidity);
-            acc[accIndex].epm_humidity_min = Math.min(acc[accIndex].epm_humidity_min, cur.epm_humidity);
-        } else {
-            acc[accIndex].epm_temperature /= count;
-            acc[accIndex].epm_humidity /= count;
-
-            acc.push({
-                date: cur.date,
-                epm_temperature: cur.epm_temperature,
-                epm_humidity: cur.epm_humidity,
-                epm_temperature_max: cur.epm_temperature,
-                epm_temperature_min: cur.epm_temperature,
-                epm_humidity_max: cur.epm_humidity,
-                epm_humidity_min: cur.epm_humidity
-            });
-            count = 1;
-        }
-
-        if (index == result.length - 1) {
-            acc[accIndex].epm_temperature /= count;
-            acc[accIndex].epm_humidity /= count;
-        }
-
-        return acc;
-    }, []);
+        }, []);
 
     return result;
 }

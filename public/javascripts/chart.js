@@ -26,13 +26,9 @@ function getHistory(callback) {
             if (this.status == 200) {
                 var response = JSON.parse(this.responseText);
                 res = response.
-                filter((item) => {
-                    return item.date != undefined && item.epm_temperature != undefined && item.epm_humidity != undefined
-                }).
                 map((item) => {
                     date = new Date(item.date)
                     return [date.toLocaleString("ru", dateFormatOptions),
-                        item.epm_temperature, item.epm_humidity,
                         item.epm_temperature_max, item.epm_temperature_min,
                         item.epm_humidity_max, item.epm_humidity_min
                     ];
@@ -57,8 +53,8 @@ function drawChart() {
         var chartDivTemp = document.getElementById('chart_div_temp');
         var chartTemp = new google.visualization.LineChart(chartDivTemp);
         var dataTemp = google.visualization.arrayToDataTable([
-            ['Дата', 'Средняя', 'Макс', 'Мин']
-        ].concat(res.map((item) => [item[0], +item[1].toFixed(1), +item[3].toFixed(1), +item[4].toFixed(1)])));
+            ['Дата', 'Макс', 'Мин']
+        ].concat(res.map((item) => [item[0], +item[1].toFixed(1), +item[2].toFixed(1)])));
         var classicOptionsTemp = {
             title: 'Температура в серверной ' + lastRes[1].toFixed(1) || "",
             curveType: 'function',
@@ -69,10 +65,9 @@ function drawChart() {
                 0: { targetAxisIndex: 0 }
             },
             vAxes: {
-                // Adds titles to each axis.
-                0: { title: 'Средняя', viewWindow: {} },
-                1: { title: 'Макс', viewWindow: {} },
-                2: { title: 'Мин', viewWindow: {} }
+                // Adds titles to each axis.                
+                0: { title: 'Макс', viewWindow: {} },
+                1: { title: 'Мин', viewWindow: {} }
             }
         }
         chartTemp.draw(dataTemp, classicOptionsTemp);
@@ -80,8 +75,8 @@ function drawChart() {
         chartDivHum = document.getElementById('chart_div_hum');
         chartHum = new google.visualization.LineChart(chartDivHum);
         dataHum = google.visualization.arrayToDataTable([
-            ['Дата', 'Средняя', 'Макс', 'Мин']
-        ].concat(res.map((item) => [item[0], +item[2].toFixed(0), +item[5].toFixed(0), +item[6].toFixed(0)])));
+            ['Дата', 'Макс', 'Мин']
+        ].concat(res.map((item) => [item[0], +item[3].toFixed(0), +item[4].toFixed(0)])));
         classicOptionsHum = {
             title: 'Влажность в серверной ' + lastRes[2].toFixed(0) || "",
             curveType: 'function',
@@ -93,9 +88,8 @@ function drawChart() {
             },
             vAxes: {
                 // Adds titles to each axis.
-                0: { title: 'Средняя', viewWindow: {} },
-                1: { title: 'Макс', viewWindow: {} },
-                2: { title: 'Мин', viewWindow: {} }
+                0: { title: 'Макс', viewWindow: {} },
+                1: { title: 'Мин', viewWindow: {} }
             }
         }
         chartHum.draw(dataHum, classicOptionsHum);
